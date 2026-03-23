@@ -25,7 +25,7 @@ Luckily, you can help them answer this question with data visualization!
 #| label: garage
 #| eval: false
 
-duke_forest |>
+duke_forest <- duke_forest |>
   mutate(garage = if_else(str_detect(parking, "Garage"),   "Garage", "No garage"))
 ```
 
@@ -37,10 +37,20 @@ duke_forest |>
 ```{r}
 #| label: price-garage
 
-# add code here
+ggplot(duke_forest,
+       aes(x = price, fill = garage)) +
+  geom_histogram(binwidth = 25000) +
+  facet_wrap(~garage) +
+  scale_fill_manual(values = c("Garage" = "#2E86AB", "No garage" = "#A23B72")) +
+  labs(
+    title = "Duke Forest House Price by Garage",
+    x = "House Price ($)",
+    y = "Count"
+  ) +
+  theme(legend.position = "none")
 ```
 
-Add narrative here...
+Garage and no-garage houses show overlapping price distributions $500-700K, with greater housing availability for those without garages. Garage houses have few low-end listings, but a similar overall spread. Having a garage seems to somewhat increase prices, but not dramatically so.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
@@ -67,10 +77,28 @@ Once again, data visualization skills to the rescue!
 ```{r}
 #| label: price-area
 
-# add code here
+ggplot(duke_forest,
+       aes(x = area, y = price, color = year_built)) +
+  geom_point(alpha = 1.2, size = 2) +
+  geom_smooth(se = FALSE, size = 1.2) +
+  labs(
+    title = "Duke Forest House Prices by Size and Year Built",
+    x = "House Area (sq ft)",
+    y = "Sale Price ($)",
+    colour = "Year Built"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "right")
 ```
 
-Add narrative here...
+Claim 1: Larger houses are priced higher.
+  The smooth curve follows a positive relationship, with prices increasing with area. Although there are outliers, particularly with larger houses, perhaps older fixer-uppers that cost less to buy due to maintenance costs.
+
+Claim 2: Newer houses are priced higher.
+  This seems to be supported, where relatively newer houses dominate the high-price upper-right region, though they're still within the expected (general trend) price range for their size. Year influences price but interacts strongly with area rather than acting independently."
+
+Claim 3: Bigger and more expensive houses tend to be newer ones than smaller and cheaper ones.
+  This is supported as the upper-right quadrant (large + expensive) shows predominantly newer construction years, while lower-left (small + cheap) has more older houses. Thus, bigger and expensive homes tend to be newer overall.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
