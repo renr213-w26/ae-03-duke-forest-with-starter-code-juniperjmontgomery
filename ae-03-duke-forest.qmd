@@ -25,7 +25,7 @@ Luckily, you can help them answer this question with data visualization!
 #| label: garage
 #| eval: false
 
-duke_forest |>
+duke_forest <- duke_forest |>
   mutate(garage = if_else(str_detect(parking, "Garage"),   "Garage", "No garage"))
 ```
 
@@ -37,10 +37,20 @@ duke_forest |>
 ```{r}
 #| label: price-garage
 
-# add code here
+ggplot(duke_forest,
+       aes(x = price, fill = garage)) +
+  geom_histogram(binwidth = 25000) +
+  facet_wrap(~garage) +
+  scale_fill_manual(values = c("Garage" = "#2E86AB", "No garage" = "#A23B72")) +
+  labs(
+    title = "Duke Forest House Price by Garage",
+    x = "House Price ($)",
+    y = "Count"
+  ) +
+  theme(legend.position = "none")
 ```
 
-Add narrative here...
+Garage and no-garage houses show overlapping price distributions $500-700K, with greater housing availability for those without garages. Garage houses have few low-end listings, but a similar overall spread. Having a garage seems to somewhat increase prices, but not dramatically so.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
